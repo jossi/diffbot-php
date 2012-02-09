@@ -12,7 +12,7 @@ class Client
 
     const ARTICLE_TYPE = 'article';
 
-    const FRONTPAGE_TYPE = 'fronttpage';
+    const FRONTPAGE_TYPE = 'frontpage';
 
     protected $token;
 
