@@ -18,11 +18,14 @@ class Client
 
     protected $url;
 
+    protected $params;
+
     protected $httpClient;
 
     public function __construct(
         $token,
         $url,
+        array $params = array(),
         $httpClient = null,
         array $httpClientConfig = array()
     )
@@ -30,6 +33,8 @@ class Client
         $this->setUrl($url);
 
         $this->setToken($token);
+
+        $this->setParams($params);
 
         if (null === $httpClient) {
             $httpClient = new Curl($httpClientConfig);
@@ -71,14 +76,24 @@ class Client
         return $this->httpClient;
     }
 
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
+
     public function getArticle()
     {
-        $this->getPage(self::ARTICLE_TYPE);
+        return $this->getPage(self::ARTICLE_TYPE);
     }
 
     public function getFrontpage()
     {
-        $this->getPage(self::FRONTPAGE_TYPE);
+        return $this->getPage(self::FRONTPAGE_TYPE);
     }
 
     protected function getPage($type)
@@ -93,6 +108,8 @@ class Client
             'token' => $this->getToken(),
             'url'   => $this->getUrl()
         );
+
+        $params = array_merge($params, $this->getParams());
 
         $finalUrl  = self::API_URL . $type;
         $finalUrl .= '?' . http_build_query($params);
