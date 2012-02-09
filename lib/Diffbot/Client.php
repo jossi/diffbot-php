@@ -12,6 +12,8 @@ class Client
 
     const ARTICLE_TYPE = 'article';
 
+    const FRONTPAGE_TYPE = 'fronttpage';
+
     protected $token;
 
     protected $url;
@@ -71,7 +73,17 @@ class Client
 
     public function getArticle()
     {
-        $targetUrl = $this->prepareUrl(self::ARTICLE_TYPE);
+        $this->getPage(self::ARTICLE_TYPE);
+    }
+
+    public function getFrontpage()
+    {
+        $this->getPage(self::FRONTPAGE_TYPE);
+    }
+
+    protected function getPage($type)
+    {
+        $targetUrl = $this->prepareUrl($type);
         return $this->getHttpClient()->get($targetUrl);
     }
 
