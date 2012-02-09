@@ -16,22 +16,17 @@ class Client
 
     protected $token;
 
-    protected $url;
-
     protected $params;
 
     protected $httpClient;
 
     public function __construct(
         $token,
-        $url,
         array $params = array(),
         $httpClient = null,
         array $httpClientConfig = array()
     )
     {
-        $this->setUrl($url);
-
         $this->setToken($token);
 
         $this->setParams($params);
@@ -41,17 +36,6 @@ class Client
         }
 
         $this->setHttpClient($httpClient);
-    }
-
-    public function setUrl($url)
-    {
-        $this->url = $url;
-        return $this;
-    }
-
-    public function getUrl()
-    {
-        return $this->url;
     }
 
     public function setToken($token)
@@ -86,27 +70,57 @@ class Client
         return $this->params;
     }
 
-    public function getArticle()
+    public function getArticle($url)
     {
-        return $this->getPage(self::ARTICLE_TYPE);
+        return $this->getPage($url, self::ARTICLE_TYPE);
     }
 
-    public function getFrontpage()
+    public function getFrontpage($url)
     {
-        return $this->getPage(self::FRONTPAGE_TYPE);
+        return $this->getPage($url, self::FRONTPAGE_TYPE);
     }
 
-    protected function getPage($type)
+    /*
+    public function getArticleFromHtml($html)
     {
-        $targetUrl = $this->prepareUrl($type);
+        return $this->getPageFromHtml($html, self::ARTICLE_TYPE);
+    }
+
+    public function getFrontpageFromHtml($html)
+    {
+        return $this->getPageFromHtml($html, self::FRONTPAGE_TYPE);
+    }
+    */
+
+    protected function getPage($url, $type)
+    {
+        $targetUrl = $this->prepareUrl($url, $type);
         return $this->getHttpClient()->get($targetUrl);
     }
 
-    public function prepareUrl($type)
+    /*
+    protected function getPageFromHtml($html, $type)
+    {
+        $targetUrl = self::API_URL . $type;
+        $httpClient = $this->getHttpClient();
+        $httpClient->setOptions(
+            array(
+                CURLOPT_HTTPHEADER => array('Content-type: text/html', 'Content-length: ' . strlen($html)),
+                CURLOPT_VERBOSE        => 1,
+            )
+        );
+        $params = array(
+            $html
+        );
+        return $httpClient->post($targetUrl, $params);
+    }
+    */
+
+    protected function prepareUrl($url, $type)
     {
         $params = array(
             'token' => $this->getToken(),
-            'url'   => $this->getUrl()
+            'url'   => $url
         );
 
         $params = array_merge($params, $this->getParams());
