@@ -20,7 +20,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_isValidUrl_urlIsAnInteger_returnsFalse()
     {
         $url = 27;
-        $client = new Client(self::TOKEN, $url);
+        $client = new Client(self::TOKEN);
         $result = $client->isValidUrl($url);
         $this->assertFalse($result);
     }
@@ -28,7 +28,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_isValidUrl_urlIsNull_returnsFalse()
     {
         $url = null;
-        $client = new Client(self::TOKEN, $url);
+        $client = new Client(self::TOKEN);
         $result = $client->isValidUrl($url);
         $this->assertFalse($result);
     }
@@ -36,7 +36,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_isValidUrl_urlIsAnEmptyString_returnsFalse()
     {
         $url = '';
-        $client = new Client(self::TOKEN, $url);
+        $client = new Client(self::TOKEN);
         $result = $client->isValidUrl($url);
         $this->assertFalse($result);
     }
@@ -44,7 +44,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_isValidUrl_invalidUrl_returnsFalse()
     {
         $url = self::INVALID_URL;
-        $client = new Client(self::TOKEN, $url);
+        $client = new Client(self::TOKEN);
         $result = $client->isValidUrl($url);
         $this->assertFalse($result);
     }
@@ -52,7 +52,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_isValidUrl_validUrl_returnsTrue()
     {
         $url = self::VALID_URL;
-        $client = new Client(self::TOKEN, $url);
+        $client = new Client(self::TOKEN);
         $result = $client->isValidUrl($url);
         $this->assertTrue($result);
     }
@@ -61,7 +61,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_construct_noHttpClient_defaultHttpClientIsSet()
     {
         $url = self::VALID_URL;
-        $client = new Client(self::TOKEN, $url);
+        $client = new Client(self::TOKEN);
         $actual = $client->getHttpClient();
         $expected = '\Diffbot\Http\ClientInterface';
 
@@ -72,7 +72,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $httpClientStub = $this->getHttpClientStub();
         $url = self::VALID_URL;
-        $client = new Client(self::TOKEN, $url);
+        $client = new Client(self::TOKEN);
         $client->setHttpClient($httpClientStub);
 
         $expected = get_class($httpClientStub);
