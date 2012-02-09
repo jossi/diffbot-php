@@ -24,13 +24,13 @@ class Client implements ClientInterface{
      * 
      * @var array - allows to pass curl options
      */
-    var $options = array();
+    protected $options;
 
     /**
      *Constructor
      * @param array $options - curl options
      */
-    public function __construct(array $options = null) {
+    public function __construct(array $options = array()) {
         $this->options = $options;
     }
 
@@ -74,18 +74,10 @@ class Client implements ClientInterface{
         $this->http_info = array();
         $ci = curl_init();
         /* Curl settings */
-        if (isset($this->options['useragent'])) {
-            curl_setopt($ci, CURLOPT_USERAGENT, $this->options['useragent']);
+        foreach ($this->options as $option => $value) {
+            curl_setopt($ci, $option, $value);
         }
-        if (isset($this->options['connecttimeout'])) {
-            curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, $this->options['connecttimeout']);
-        }
-        if (isset($this->options['timeout'])) {
-            curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, $this->options['timeout']);
-        }
-        if (isset($this->options['ssl_verifypeer'])) {
-            curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, $this->options['ssl_verifypeer']);
-        }
+
         curl_setopt($ci, CURLOPT_RETURNTRANSFER, TRUE);
 
         curl_setopt($ci, CURLOPT_HEADER, FALSE);
@@ -108,10 +100,11 @@ class Client implements ClientInterface{
                     $url = self::addParamsToUrl($url, $paramStr);
                 }
         }
-        
+        var_dump($ci);
+
         curl_setopt($ci, CURLOPT_URL, $url);
         $content = curl_exec($ci);
-        
+
         // the response contains curl info (response header) + the response content
         $this->response = new Response($content, curl_getinfo($ci)); 
         
@@ -180,5 +173,23 @@ class Client implements ClientInterface{
         } 
         parse_str($params, $paramArr);
         return $paramArr;
+    }
+
+    /**
+     * setter for options
+     * @param array $options
+     */
+    public function setOptions(array $options= array())
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * getter for options
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 }
