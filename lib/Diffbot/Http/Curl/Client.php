@@ -100,7 +100,6 @@ class Client implements ClientInterface{
                     $url = self::addParamsToUrl($url, $paramStr);
                 }
         }
-        var_dump($ci);
 
         curl_setopt($ci, CURLOPT_URL, $url);
         $content = curl_exec($ci);
